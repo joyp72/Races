@@ -8,9 +8,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
 
+import com.joi.races.Main;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
 public class Menus {
 
@@ -22,133 +28,199 @@ public class Menus {
 
     public Menus(Player p) {
 
-        selector = Bukkit.createInventory(p, 18, "Pick a race:");
+        selector = Bukkit.createInventory(p, 45, "Pick a race:");
+
+        ItemStack info = new ItemStack(Material.ENDER_EYE, 1);
+        {
+            ItemMeta meta = info.getItemMeta();
+            meta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Pick your race below!");
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Hover over the races");
+            lore.add(ChatColor.GRAY + "to see more details.");
+            meta.setLore(lore);
+            info.setItemMeta(meta);
+            selector.setItem(2, info);
+        }
+
+        ItemStack info2 = new ItemStack(Material.NETHER_STAR, 1);
+        {
+            ItemMeta meta = info2.getItemMeta();
+            meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "DISCLAIMER!");
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add(" ");
+            lore.add(ChatColor.GRAY + "Please pick your race wisely");
+            lore.add(ChatColor.GRAY + "as you will only get one chance");
+            lore.add(ChatColor.GRAY + "to change your race.");
+            meta.setLore(lore);
+            info2.setItemMeta(meta);
+            selector.setItem(6, info2);
+        }
 
         ItemStack human = new ItemStack(Material.PLAYER_HEAD, 1);
         {
-            ItemMeta meta = human.getItemMeta();
-            meta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Human");
+            // ItemMeta meta = human.getItemMeta();
+            SkullMeta meta = (SkullMeta) human.getItemMeta();
+            meta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Human");
             ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Join race");
+            lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Attributes: ");
-            lore.add(ChatColor.GREEN + "Luck");
-            lore.add(ChatColor.GREEN + "Hero of the Village");
+            lore.add(ChatColor.GRAY + "Bonuses: ");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Luck");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Hero of the Village");
             meta.setLore(lore);
             human.setItemMeta(meta);
-            selector.setItem(10, human);
+            selector.setItem(19, human);
         }
 
-        ItemStack angel = new ItemStack(Material.ELYTRA, 1);
+        ItemStack angel = new ItemStack(Material.PLAYER_HEAD, 1);
         {
-            ItemMeta meta = angel.getItemMeta();
-            meta.setDisplayName(ChatColor.WHITE + "" + ChatColor.BOLD + "Angel");
+            SkullMeta meta = (SkullMeta) angel.getItemMeta();
+            UUID uuid = UUID.randomUUID();
+            URL url = null;
+            try {
+                url = new URL("https://textures.minecraft.net/texture/be6f6d3560a29a3ab0c28f8b72c0582c0a75790b93720a9c0586bf8a1e59595d");
+            } catch (MalformedURLException e) {
+                Main.get().getLogger().info("Failed to load skin for " + human.toString());
+                e.printStackTrace();
+            }
+            PlayerProfile profile = p.getServer().createPlayerProfile(uuid);
+            profile.getTextures().setSkin(url);
+            meta.setOwnerProfile(profile);
+            meta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Angel");
             ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Join race");
+            lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Attributes: ");
-            lore.add(ChatColor.WHITE + "Slow fall");
-            lore.add(ChatColor.WHITE + "Health boost");
+            lore.add(ChatColor.GRAY + "Bonuses: ");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Slow fall");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Health boost");
             meta.setLore(lore);
             meta.setUnbreakable(true);
             meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             angel.setItemMeta(meta);
-            selector.setItem(12, angel);
+            selector.setItem(20, angel);
         }
 
-        ItemStack merrow = new ItemStack(Material.COD, 1);
+        ItemStack merrow = new ItemStack(Material.PLAYER_HEAD, 1);
         {
-            ItemMeta meta = merrow.getItemMeta();
-            meta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Merrow");
+            SkullMeta meta = (SkullMeta) merrow.getItemMeta();
+            UUID uuid = UUID.randomUUID();
+            URL url = null;
+            try {
+                url = new URL("https://textures.minecraft.net/texture/76688cbe83fe65e2b3465725d54fbda280796d5fee54a71b8ffdaa04634e91b");
+            } catch (MalformedURLException e) {
+                Main.get().getLogger().info("Failed to load skin for " + human.toString());
+                e.printStackTrace();
+            }
+            PlayerProfile profile = p.getServer().createPlayerProfile(uuid);
+            profile.getTextures().setSkin(url);
+            meta.setOwnerProfile(profile);
+            meta.setDisplayName(ChatColor.BLUE + "" + ChatColor.BOLD + "Merrow");
             ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Join race");
+            lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Attributes: ");
-            lore.add(ChatColor.AQUA + "Conduit power");
-            lore.add(ChatColor.AQUA + "Dolphin's grace");
+            lore.add(ChatColor.GRAY + "Bonuses: ");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Conduit power");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Dolphin's grace");
             meta.setLore(lore);
             merrow.setItemMeta(meta);
-            selector.setItem(14, merrow);
+            selector.setItem(21, merrow);
         }
 
-        ItemStack dragonborne = new ItemStack(Material.BLAZE_POWDER, 1);
+        ItemStack dragonborne = new ItemStack(Material.PLAYER_HEAD, 1);
         {
-            ItemMeta meta = dragonborne.getItemMeta();
-            meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Dragonborne");
+            SkullMeta meta = (SkullMeta) dragonborne.getItemMeta();
+            UUID uuid = UUID.randomUUID();
+            URL url = null;
+            try {
+                url = new URL("https://textures.minecraft.net/texture/c23b749e4f458448ea8f666483f9f917beab1d3caa9d411f909945c1af6ffd1d");
+            } catch (MalformedURLException e) {
+                Main.get().getLogger().info("Failed to load skin for " + human.toString());
+                e.printStackTrace();
+            }
+            PlayerProfile profile = p.getServer().createPlayerProfile(uuid);
+            profile.getTextures().setSkin(url);
+            meta.setOwnerProfile(profile);
+            meta.setDisplayName(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Dragonborne");
             ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Join race");
+            lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Attributes: ");
-            lore.add(ChatColor.RED + "Resistance");
-            lore.add(ChatColor.RED + "Fire resistance");
+            lore.add(ChatColor.GRAY + "Bonuses: ");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Resistance");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Fire resistance");
             meta.setLore(lore);
             dragonborne.setItemMeta(meta);
-            selector.setItem(16, dragonborne);
+            selector.setItem(23, dragonborne);
         }
 
-        ItemStack dwarf = new ItemStack(Material.TOTEM_OF_UNDYING, 1);
+        ItemStack dwarf = new ItemStack(Material.PLAYER_HEAD, 1);
         {
-            ItemMeta meta = dwarf.getItemMeta();
-            meta.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Dwarf");
+            SkullMeta meta = (SkullMeta) dwarf.getItemMeta();
+            UUID uuid = UUID.randomUUID();
+            URL url = null;
+            try {
+                url = new URL("https://textures.minecraft.net/texture/397c1732ca0ccd08c87705a84107927fbf59fab45f82a8840071189fb61cdb54");
+            } catch (MalformedURLException e) {
+                Main.get().getLogger().info("Failed to load skin for " + human.toString());
+                e.printStackTrace();
+            }
+            PlayerProfile profile = p.getServer().createPlayerProfile(uuid);
+            profile.getTextures().setSkin(url);
+            meta.setOwnerProfile(profile);
+            meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Dwarf");
             ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Join race");
+            lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Attributes: ");
-            lore.add(ChatColor.YELLOW + "Haste");
-            lore.add(ChatColor.YELLOW + "Night Vision");
+            lore.add(ChatColor.GRAY + "Bonuses: ");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Haste");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Night Vision");
             meta.setLore(lore);
             dwarf.setItemMeta(meta);
-            selector.setItem(2, dwarf);
+            selector.setItem(24, dwarf);
         }
 
-        ItemStack oni = new ItemStack(Material.ENDER_EYE, 1);
+        ItemStack oni = new ItemStack(Material.PLAYER_HEAD, 1);
         {
-            ItemMeta meta = oni.getItemMeta();
-            meta.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Oni");
+            SkullMeta meta = (SkullMeta) oni.getItemMeta();
+            UUID uuid = UUID.randomUUID();
+            URL url = null;
+            try {
+                url = new URL("https://textures.minecraft.net/texture/8aebecee607f0bb87b95185de589aa55c80955860b664bc52d4ee60f7de6d710");
+            } catch (MalformedURLException e) {
+                Main.get().getLogger().info("Failed to load skin for " + human.toString());
+                e.printStackTrace();
+            }
+            PlayerProfile profile = p.getServer().createPlayerProfile(uuid);
+            profile.getTextures().setSkin(url);
+            meta.setOwnerProfile(profile);
+            meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Oni");
             ArrayList<String> lore = new ArrayList<>();
-            lore.add(ChatColor.GRAY + "Join race");
+            lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
-            lore.add(ChatColor.GRAY + "Attributes: ");
-            lore.add(ChatColor.LIGHT_PURPLE + "Strength");
-            lore.add(ChatColor.LIGHT_PURPLE + "Absorption");
+            lore.add(ChatColor.GRAY + "Bonuses: ");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Strength");
+            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Absorption");
             meta.setLore(lore);
             oni.setItemMeta(meta);
-            selector.setItem(6, oni);
+            selector.setItem(25, oni);
         }
-    }
 
-    public static String[] formatLore(String text, int size, org.bukkit.ChatColor color) {
-        List<String> ret = new ArrayList<String>();
+        ItemStack exit = new ItemStack(Material.BOOK, 1);
+        {
+            ItemMeta meta = exit.getItemMeta();
+            meta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Exit");
+            exit.setItemMeta(meta);
+            selector.setItem(40, exit);
+        }
 
-        if (text == null || text.length() == 0)
-            return new String[ret.size()];
-
-        String[] words = text.split(" ");
-        String rebuild = "";
-
-        for (int i = 0; i < words.length; i++) {
-            int wordLen = words[i].length();
-            if (rebuild.length() + wordLen > 40 || words[i].contains("\n")
-                    || words[i].equals(Character.LINE_SEPARATOR)) {
-
-                ret.add(color + rebuild);
-                rebuild = "";
-                if (words[i].equalsIgnoreCase("\n")) {
-                    words[i] = "";
-                    continue;
-                }
-
+        while (selector.firstEmpty() >= 0) {
+            ItemStack pane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
+            {
+                ItemMeta meta = pane.getItemMeta();
+                meta.setDisplayName(" ");
+                pane.setItemMeta(meta);
+                selector.setItem(selector.firstEmpty(), pane);
             }
-            rebuild = rebuild + " " + words[i];
-
         }
-        if (!rebuild.equalsIgnoreCase(""))
-            ret.add(color + rebuild);
-
-        String[] val = new String[ret.size()];
-        for (int i = 0; i < ret.size(); i++)
-            val[i] = ret.get(i);
-
-        return val;
     }
 }

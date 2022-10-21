@@ -104,12 +104,12 @@ public class Settings {
         List<PotionEffect> effects = new ArrayList<PotionEffect>();
         for (String s : effectsConfig.getStringList(race)) {
             PotionEffectType effectType = PotionEffectType.getByName(s);
-            if (effectType.equals(PotionEffectType.ABSORPTION) || effectType.equals(PotionEffectType.NIGHT_VISION)) {
-                PotionEffect e = new PotionEffect(effectType, 20 * 5 * 60, 1 , false, false);
+            if (effectType.equals(PotionEffectType.HEALTH_BOOST) || effectType.equals(PotionEffectType.ABSORPTION)) {
+                PotionEffect e = new PotionEffect(effectType, Integer.MAX_VALUE, 1 , false, false);
                 effects.add(e);
                 continue;
             }
-            PotionEffect e = new PotionEffect(effectType, 40, 0 , false, false);
+            PotionEffect e = new PotionEffect(effectType, Integer.MAX_VALUE, 0 , false, false);
             effects.add(e);
         }
         return effects;
@@ -149,7 +149,7 @@ public class Settings {
                 break;
             case "angel":
                 effects.add(PotionEffectType.SLOW_FALLING.getName());
-                effects.add(PotionEffectType.ABSORPTION.getName());
+                effects.add(PotionEffectType.HEALTH_BOOST.getName());
                 break;
             case "merrow":
                 effects.add(PotionEffectType.CONDUIT_POWER.getName());
