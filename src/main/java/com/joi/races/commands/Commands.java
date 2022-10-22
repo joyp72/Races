@@ -22,7 +22,7 @@ public abstract class Commands {
         if (sender.hasPermission(permission)) {
             onCommand(sender, args);
         } else {
-            sender.sendMessage(ChatColor.RED + "Not enough permissions!");
+            sender.sendMessage(ChatColor.RED + "Not enough permissions.");
         }
     }
 

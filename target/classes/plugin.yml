@@ -6,4 +6,11 @@ main: com.joi.races.Main
 
 commands:
   races:
-    description: main command.
+    usage: "Usage: /races"
+    description: Open Races GUI.
+  races set:
+    usage: "Usage: /races set [race | tokens] <player> <value>"
+    description: Set data for a player.
+  races get:
+    usage: "Usage: /races get [race | tokens] <player>"
+    description: Get data for player.

@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -39,12 +40,30 @@ public class ControlListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
+    public void onRespawn(PlayerRespawnEvent e) {
         Player p = e.getPlayer();
-        if (settings.getDB(p.getName()) == null) {
+        if (!settings.hasRace(p)) {
             return;
         }
-        String race = (String) settings.getDB(p.getName().toString());
+        String race = settings.getRace(p);
+        if (scheduledPlayers.contains(p.getUniqueId())) {
+            scheduledPlayers.remove(p.getUniqueId());
+        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                p.addPotionEffects(settings.getEffects(race));
+            }
+        }.runTaskLater(Main.get(), 5L);
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e) {
+        Player p = e.getPlayer();
+        if (!settings.hasRace(p)) {
+            return;
+        }
+        String race = (String) settings.getRace(p);
         for (PotionEffect effect : settings.getEffects(race)) {
             if (!p.hasPotionEffect(effect.getType())) {
                 if (effect.getType().equals(PotionEffectType.ABSORPTION)
@@ -52,14 +71,18 @@ public class ControlListener implements Listener {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (!p.isOnline()) {
+                                if (!p.isOnline() || !scheduledPlayers.contains(p.getUniqueId())) {
+                                    return;
+                                }
+                                if (!settings.getRace(p).equalsIgnoreCase("oni")) {
+                                    scheduledPlayers.remove(p.getUniqueId());
                                     return;
                                 }
                                 PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 1 , false, false);
                                 p.addPotionEffect(effect);
                                 scheduledPlayers.remove(p.getUniqueId());
                             }
-                        }.runTaskLater(Main.get(), 20L * 5L);
+                        }.runTaskLater(Main.get(), 20L * 5L * 60L);
                         continue;
                 }
                 p.addPotionEffect(effect);
@@ -73,10 +96,10 @@ public class ControlListener implements Listener {
             return;
         }
         Player p = (Player) e.getEntity();
-        if (settings.getDB(p.getName()) == null) {
+        if (!settings.hasRace(p)) {
             return;
         }
-        String race = (String) settings.getDB(p.getName().toString());
+        String race = (String) settings.getRace(p);
 
         if (!race.equalsIgnoreCase("oni") || !p.hasPotionEffect(PotionEffectType.ABSORPTION) || p.getAbsorptionAmount() == 0) {
             return;
@@ -87,7 +110,11 @@ public class ControlListener implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!p.isOnline()) {
+                    if (!p.isOnline() || !scheduledPlayers.contains(p.getUniqueId())) {
+                        return;
+                    }
+                    if (!settings.getRace(p).equalsIgnoreCase("oni")) {
+                        scheduledPlayers.remove(p.getUniqueId());
                         return;
                     }
                     PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 1 , false, false);
@@ -104,43 +131,90 @@ public class ControlListener implements Listener {
             return;
         }
         if (!e.getAction().equals(EntityPotionEffectEvent.Action.REMOVED)
-            && !e.getAction().equals(EntityPotionEffectEvent.Action.CLEARED)) {
+            && !e.getAction().equals(EntityPotionEffectEvent.Action.CLEARED)
+            && !e.getAction().equals(EntityPotionEffectEvent.Action.CHANGED)) {
                 return;
         }
         if (!(e.getEntity() instanceof Player)) {
             return;
         }
         Player p = (Player) e.getEntity();
-        if (settings.getDB(p.getName()) == null) {
+        if (!settings.hasRace(p)) {
             return;
         }
-        String race = (String) settings.getDB(p.getName().toString());
-        for (PotionEffect effect : settings.getEffects(race)) {
-            if (e.getOldEffect().getType().equals(effect.getType())) {
-                e.getOldEffect().apply(p);
-            }
+        if (!settings.getRace(p).equalsIgnoreCase("oni")
+            || !e.getOldEffect().getType().equals(PotionEffectType.ABSORPTION)
+            || e.getOldEffect().getAmplifier() <= 1) {
+            return;
         }
+        if (e.getCause().equals(EntityPotionEffectEvent.Cause.MILK)) {
+            return;
+        }
+        scheduledPlayers.add(p.getUniqueId());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!p.isOnline() || !scheduledPlayers.contains(p.getUniqueId())) {
+                        return;
+                    }
+                    if (!settings.getRace(p).equalsIgnoreCase("oni")) {
+                        scheduledPlayers.remove(p.getUniqueId());
+                        return;
+                    }
+                    PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 1 , false, false);
+                    p.addPotionEffect(effect);
+                    scheduledPlayers.remove(p.getUniqueId());
+                }
+            }.runTaskLater(Main.get(), 20L * 5L * 60L);
     }
 
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent e) {
+        Player p = e.getPlayer();
+        if (e.getItem().getType() == Material.ENCHANTED_GOLDEN_APPLE) {
+            if (!settings.hasRace(p)) {
+                return;
+            }
+            if (!p.hasPotionEffect(PotionEffectType.ABSORPTION)) {
+                return;
+            }
+            p.removePotionEffect(PotionEffectType.ABSORPTION);
+        }
         if (e.getItem().getType() != Material.MILK_BUCKET) {
             return;
         }
-        Player p = (Player) e.getPlayer();
-        if (settings.getDB(p.getName()) == null) {
+        if (!settings.hasRace(p)) {
             return;
         }
-        String race = (String) settings.getDB(p.getName().toString());
+        String race = (String) settings.getRace(p);
         for (PotionEffect effect : settings.getEffects(race)) {
             if (p.hasPotionEffect(effect.getType())) {
                 PotionEffect ef = p.getPotionEffect(effect.getType());
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        ef.apply(p);
-                    }
-                }.runTaskLater(Main.get(), 5L);
+                if (ef.getType().equals(PotionEffectType.ABSORPTION) && ef.getAmplifier() > 1) {
+                    scheduledPlayers.add(p.getUniqueId());
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (!p.isOnline() || !scheduledPlayers.contains(p.getUniqueId())) {
+                                return;
+                            }
+                            if (!settings.getRace(p).equalsIgnoreCase("oni")) {
+                                scheduledPlayers.remove(p.getUniqueId());
+                                return;
+                            }
+                            PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 1 , false, false);
+                            p.addPotionEffect(effect);
+                            scheduledPlayers.remove(p.getUniqueId());
+                        }
+                    }.runTaskLater(Main.get(), 20L * 5L * 60L);
+                } else {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            p.addPotionEffect(effect);
+                        }
+                    }.runTaskLater(Main.get(), 5L);
+                }
             }
         }
     }

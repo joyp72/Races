@@ -10,6 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.joi.races.Main;
+import com.joi.races.menus.Menus;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class CommandsManager implements CommandExecutor {
 
@@ -30,7 +33,8 @@ public class CommandsManager implements CommandExecutor {
 
     public void setup() {
         Main.get().getCommand("races").setExecutor(this);
-        cmds.add(new Test());
+        cmds.add(new Set());
+        cmds.add(new Get());
     }
 
     @Override
@@ -42,13 +46,22 @@ public class CommandsManager implements CommandExecutor {
         if (!cmd.getName().equalsIgnoreCase("races")) {
             return true;
         }
-        if (args.length != 0) {
+        if (args.length == 0) {
+            if (!p.hasPermission("races.default")) {
+                p.sendMessage(ChatColor.RED + "Not enough permissions.");
+                return true;
+            }
+            new Menus(p);
+            p.openInventory(Menus.getSelector());
+        }else {
             Commands c = getCommand(args[0]);
             if (c != null) {
                 List<String> a = new ArrayList<String>(Arrays.asList(args));
                 a.remove(0);
                 args = a.toArray(new String[a.size()]);
                 c.commandPreprocess(p, args);
+            } else {
+                p.sendMessage(ChatColor.RED + "Invalid command.");
             }
         }
         return true;

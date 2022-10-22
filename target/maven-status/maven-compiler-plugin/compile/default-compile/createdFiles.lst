@@ -1,7 +1,6 @@
 com/joi/races/commands/Commands.class
 com/joi/races/control/MessageManager.class
 com/joi/races/menus/MenusListener.class
-com/joi/races/commands/Test.class
 com/joi/races/Settings.class
 com/joi/races/control/ControlListener$1.class
 com/joi/races/control/ControlListener.class

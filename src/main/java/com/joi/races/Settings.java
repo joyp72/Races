@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -19,6 +20,8 @@ public class Settings {
     private FileConfiguration dbConfig;
     private File effectsFile;
     private FileConfiguration effectsConfig;
+    private String racePath = ".race";
+    private String changeTokensPath = ".changeTokens";
     private String[] races = {"human", "angel", "merrow", "dragonborne", "dwarf", "oni"};
 
     static {
@@ -86,18 +89,38 @@ public class Settings {
         }
     }
 
-    public void setDB(String path, Object value) {
-        dbConfig.set(path, value);
+    public void setChangeTokens(Player p, int value) {
+        dbConfig.set(p.getUniqueId().toString() + changeTokensPath, value);
         try {
             dbConfig.save(dbFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    @SuppressWarnings("unchecked")
-    public <T> T getDB(String path) {
-        return (T) dbConfig.get(path);
+
+    public int getChangeTokens(Player p) {
+        if (!dbConfig.contains(p.getUniqueId() + changeTokensPath)) {
+            setChangeTokens(p, 1);
+            return 1;
+        }
+        return dbConfig.getInt(p.getUniqueId() + changeTokensPath);
+    }
+
+    public void setRace(Player p, Object value) {
+        dbConfig.set(p.getUniqueId().toString() + racePath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean hasRace(Player p) {
+        return getRace(p) == null ? false : true;
+    }
+
+    public String getRace(Player p) {
+        return dbConfig.getString(p.getUniqueId().toString() + racePath);
     }
 
     public List<PotionEffect> getEffects(String race) {
