@@ -3,6 +3,7 @@ package com.joi.races;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -98,12 +99,29 @@ public class Settings {
         }
     }
 
+    public void setChangeTokens(UUID id, int value) {
+        dbConfig.set(id.toString() + changeTokensPath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public int getChangeTokens(Player p) {
         if (!dbConfig.contains(p.getUniqueId() + changeTokensPath)) {
             setChangeTokens(p, 1);
             return 1;
         }
         return dbConfig.getInt(p.getUniqueId() + changeTokensPath);
+    }
+
+    public int getChangeTokens(UUID id) {
+        if (!dbConfig.contains(id + changeTokensPath)) {
+            setChangeTokens(id, 1);
+            return 1;
+        }
+        return dbConfig.getInt(id + changeTokensPath);
     }
 
     public void setRace(Player p, Object value) {
@@ -117,6 +135,14 @@ public class Settings {
 
     public boolean hasRace(Player p) {
         return getRace(p) == null ? false : true;
+    }
+
+    public boolean hasRace(UUID id) {
+        return getRace(id) == null ? false : true;
+    }
+
+    public String getRace(UUID id) {
+        return dbConfig.getString(id.toString() + racePath);
     }
 
     public String getRace(Player p) {
