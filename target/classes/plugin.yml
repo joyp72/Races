@@ -13,6 +13,15 @@ commands:
   races set:
     usage: "Usage: /races set [race | tokens] <player> <value>"
     description: Set data for a player.
+  races add:
+    usage: "Usage: /races add tokens <player> <value>"
+    description: Add to a player's tokens.
   races get:
     usage: "Usage: /races get [race | tokens] <player>"
     description: Get data for player.
+  races list:
+    usage: "Usage: /races list"
+    description: Display a list of online players and their race.
+  wings:
+    usage: "Usage: /wings"
+    description: Toggle wings on/off.

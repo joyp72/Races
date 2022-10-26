@@ -30,6 +30,7 @@ public class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         super.onDisable();
+        Settings.get().resetDB();
         getLogger().info("Disabled!");
     }
 }

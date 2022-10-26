@@ -39,11 +39,11 @@ public class ControlExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, String params) {
         if (player == null){
-            return null;
+            return "";
         }
         if (params.equalsIgnoreCase("race")) {
             if (!settings.hasRace(player.getUniqueId())) {
-                return null;
+                return "";
             }
             String race = settings.getRace(player.getUniqueId());
             race = race.substring(0,1).toUpperCase() + race.substring(1).toLowerCase();
@@ -75,7 +75,7 @@ public class ControlExpansion extends PlaceholderExpansion {
             int amount = settings.getChangeTokens(player.getUniqueId());
             return "" + amount;
         }
-        return null;
+        return "";
     }
     
 }

@@ -53,6 +53,9 @@ public class ControlListener implements Listener {
             @Override
             public void run() {
                 p.addPotionEffects(settings.getEffects(race));
+                if (race.equalsIgnoreCase("angel") && !settings.getWings(p)) {
+                    p.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                }
             }
         }.runTaskLater(Main.get(), 5L);
     }
@@ -65,6 +68,12 @@ public class ControlListener implements Listener {
         }
         String race = (String) settings.getRace(p);
         for (PotionEffect effect : settings.getEffects(race)) {
+            if (effect.getType().equals(PotionEffectType.SLOW_FALLING) && race.equalsIgnoreCase("angel") && !settings.getWings(p)) {
+                continue;
+            }
+            if (effect.getType().equals(PotionEffectType.ABSORPTION) && p.getAbsorptionAmount() > 0) {
+                continue;
+            }
             if (!p.hasPotionEffect(effect.getType())) {
                 if (effect.getType().equals(PotionEffectType.ABSORPTION)
                     && scheduledPlayers.contains(p.getUniqueId())) {
@@ -101,7 +110,7 @@ public class ControlListener implements Listener {
         }
         String race = (String) settings.getRace(p);
 
-        if (!race.equalsIgnoreCase("oni") || !p.hasPotionEffect(PotionEffectType.ABSORPTION) || p.getAbsorptionAmount() == 0) {
+        if (!race.equalsIgnoreCase("oni") || p.getAbsorptionAmount() == 0) {
             return;
         }
         if (p.getAbsorptionAmount() - e.getDamage() <= 0) {
@@ -190,6 +199,16 @@ public class ControlListener implements Listener {
         for (PotionEffect effect : settings.getEffects(race)) {
             if (p.hasPotionEffect(effect.getType())) {
                 PotionEffect ef = p.getPotionEffect(effect.getType());
+                if (ef.getType().equals(PotionEffectType.ABSORPTION) && ef.getAmplifier() == 1) {
+                    double hearts = p.getAbsorptionAmount();
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            p.setAbsorptionAmount(hearts);
+                        }
+                    }.runTaskLater(Main.get(), 5L);
+                    continue;
+                }
                 if (ef.getType().equals(PotionEffectType.ABSORPTION) && ef.getAmplifier() > 1) {
                     scheduledPlayers.add(p.getUniqueId());
                     new BukkitRunnable() {

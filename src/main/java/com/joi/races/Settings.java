@@ -23,6 +23,7 @@ public class Settings {
     private FileConfiguration effectsConfig;
     private String racePath = ".race";
     private String changeTokensPath = ".changeTokens";
+    private String wingsPath = ".wings";
     private String[] races = {"human", "angel", "merrow", "dragonborne", "dwarf", "oni"};
 
     static {
@@ -88,6 +89,40 @@ public class Settings {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setWings(Player p, boolean value) {
+        dbConfig.set(p.getUniqueId().toString() + wingsPath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setWings(UUID id, boolean value) {
+        dbConfig.set(id.toString() + wingsPath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean getWings(Player p) {
+        if (!dbConfig.contains(p.getUniqueId() + wingsPath)) {
+            setWings(p, true);
+            return true;
+        }
+        return dbConfig.getBoolean(p.getUniqueId() + wingsPath);
+    }
+
+    public boolean getWings(UUID id) {
+        if (!dbConfig.contains(id + wingsPath)) {
+            setWings(id, true);
+            return true;
+        }
+        return dbConfig.getBoolean(id + wingsPath);
     }
 
     public void setChangeTokens(Player p, int value) {

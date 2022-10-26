@@ -27,12 +27,12 @@ public class MessageManager
 
     public void message(final Player p, final String message, final MessageType type) {
         if (p != null) {
-            p.sendMessage(String.valueOf(this.PREFIX) + type.getColor() + message);
+            p.sendMessage(type.getColor() + message);
         }
     }
 
     public void broadcast(final String message) {
-        Bukkit.broadcastMessage(String.valueOf(this.PREFIX) + MessageType.INFO.getColor() + message);
+        Bukkit.broadcastMessage(MessageType.INFO.getColor() + message);
     }
 
     public enum MessageType

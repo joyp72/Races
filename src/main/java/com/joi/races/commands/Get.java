@@ -12,7 +12,7 @@ public class Get extends Commands {
     private Settings settings = Settings.get();
 
     public Get() {
-        super("races.admin", "Get data for a player", "get [race | tokens] <player>", new String[] { "" });
+        super("races.admin", "Get data for a player", "/races get [race | tokens] <player>", new String[] { "" });
     }
 
     @Override

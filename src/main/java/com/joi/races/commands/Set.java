@@ -13,7 +13,7 @@ public class Set extends Commands {
    private Settings settings = Settings.get();
 
     public Set() {
-        super("races.admin", "Set data for a player", "set [race | tokens] <player> <value>", new String[] { "" });
+        super("races.admin", "Set data for a player", "/races set [race | tokens] <player> <value>", new String[] { "" });
     }
 
     @Override

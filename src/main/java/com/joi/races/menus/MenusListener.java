@@ -46,7 +46,10 @@ public class MenusListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if (Menus.getSelector() == null) {
+        if (Menus.getMenus() == null) {
+            return;
+        }
+        if (Menus.getMenus().isEmpty()) {
             return;
         }
         if (!e.getView().getTitle().equalsIgnoreCase("Pick a race:")) {

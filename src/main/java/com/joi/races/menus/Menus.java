@@ -9,26 +9,38 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.profile.PlayerProfile;
 
 import com.joi.races.Main;
+import com.joi.races.Settings;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class Menus {
 
-    private static Inventory selector;
+    private static HashMap<UUID, Inventory> menus = new HashMap<UUID, Inventory>();
+    private Settings settings = Settings.get();
 
-    public  static Inventory getSelector() {
-        return selector;
+    public static HashMap<UUID, Inventory> getMenus() {
+        return menus;
     }
 
     public Menus(Player p) {
 
-        selector = Bukkit.createInventory(p, 45, "Pick a race:");
+        Inventory selector;
+
+        if (menus.get(p.getUniqueId()) != null) {
+            selector = menus.get(p.getUniqueId());
+        } else {
+            selector = Bukkit.createInventory(p, 45, "Pick a race:");
+        }
+
+        menus.put(p.getUniqueId(), selector);
 
         ItemStack info = new ItemStack(Material.ENDER_EYE, 1);
         {
@@ -48,10 +60,17 @@ public class Menus {
             ItemMeta meta = info2.getItemMeta();
             meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "DISCLAIMER!");
             ArrayList<String> lore = new ArrayList<>();
-            lore.add(" ");
             lore.add(ChatColor.GRAY + "Please pick your race wisely");
-            lore.add(ChatColor.GRAY + "as you will only get one chance");
-            lore.add(ChatColor.GRAY + "to change your race.");
+            lore.add(ChatColor.GRAY + "as you will only get a number of");
+            lore.add(ChatColor.GRAY + "chances to change your race.");
+            lore.add(" ");
+            int amount = settings.getChangeTokens(p);
+            String s = "You have " + ChatColor.RED + amount + ChatColor.GRAY + " Race Change token";
+            if (amount < 1 || amount > 1) {
+                s = s + "s";
+            }
+            s = s + ".";
+            lore.add(ChatColor.GRAY + s);
             meta.setLore(lore);
             info2.setItemMeta(meta);
             selector.setItem(6, info2);
@@ -66,8 +85,15 @@ public class Menus {
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Bonuses: ");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Luck");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Hero of the Village");
+            for (PotionEffect effect : settings.getEffects("human")) {
+                String effectName = effect.getType().getName();
+                String firstChar = effectName.substring(0, 1);
+                effectName = effectName.substring(1);
+                effectName = effectName.toLowerCase();
+                effectName = firstChar + effectName;
+                effectName = effectName.replace("_", " ");
+                lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + effectName);
+            }
             meta.setLore(lore);
             human.setItemMeta(meta);
             selector.setItem(19, human);
@@ -92,8 +118,15 @@ public class Menus {
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Bonuses: ");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Slow fall");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Health boost");
+            for (PotionEffect effect : settings.getEffects("angel")) {
+                String effectName = effect.getType().getName();
+                String firstChar = effectName.substring(0, 1);
+                effectName = effectName.substring(1);
+                effectName = effectName.toLowerCase();
+                effectName = firstChar + effectName;
+                effectName = effectName.replace("_", " ");
+                lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + effectName);
+            }
             meta.setLore(lore);
             meta.setUnbreakable(true);
             meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -120,8 +153,15 @@ public class Menus {
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Bonuses: ");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Conduit power");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Dolphin's grace");
+            for (PotionEffect effect : settings.getEffects("merrow")) {
+                String effectName = effect.getType().getName();
+                String firstChar = effectName.substring(0, 1);
+                effectName = effectName.substring(1);
+                effectName = effectName.toLowerCase();
+                effectName = firstChar + effectName;
+                effectName = effectName.replace("_", " ");
+                lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + effectName);
+            }
             meta.setLore(lore);
             merrow.setItemMeta(meta);
             selector.setItem(21, merrow);
@@ -146,8 +186,15 @@ public class Menus {
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Bonuses: ");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Resistance");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Fire resistance");
+            for (PotionEffect effect : settings.getEffects("dragonborne")) {
+                String effectName = effect.getType().getName();
+                String firstChar = effectName.substring(0, 1);
+                effectName = effectName.substring(1);
+                effectName = effectName.toLowerCase();
+                effectName = firstChar + effectName;
+                effectName = effectName.replace("_", " ");
+                lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + effectName);
+            }
             meta.setLore(lore);
             dragonborne.setItemMeta(meta);
             selector.setItem(23, dragonborne);
@@ -172,8 +219,15 @@ public class Menus {
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Bonuses: ");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Haste");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Night Vision");
+            for (PotionEffect effect : settings.getEffects("dwarf")) {
+                String effectName = effect.getType().getName();
+                String firstChar = effectName.substring(0, 1);
+                effectName = effectName.substring(1);
+                effectName = effectName.toLowerCase();
+                effectName = firstChar + effectName;
+                effectName = effectName.replace("_", " ");
+                lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + effectName);
+            }
             meta.setLore(lore);
             dwarf.setItemMeta(meta);
             selector.setItem(24, dwarf);
@@ -198,8 +252,15 @@ public class Menus {
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
             lore.add(ChatColor.GRAY + "Bonuses: ");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Strength");
-            lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Absorption");
+            for (PotionEffect effect : settings.getEffects("oni")) {
+                String effectName = effect.getType().getName();
+                String firstChar = effectName.substring(0, 1);
+                effectName = effectName.substring(1);
+                effectName = effectName.toLowerCase();
+                effectName = firstChar + effectName;
+                effectName = effectName.replace("_", " ");
+                lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + effectName);
+            }
             meta.setLore(lore);
             oni.setItemMeta(meta);
             selector.setItem(25, oni);
