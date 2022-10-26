@@ -22,6 +22,6 @@ commands:
   races list:
     usage: "Usage: /races list"
     description: Display a list of online players and their race.
-  wings:
-    usage: "Usage: /wings"
+  races wings:
+    usage: "Usage: /races wings"
     description: Toggle wings on/off.

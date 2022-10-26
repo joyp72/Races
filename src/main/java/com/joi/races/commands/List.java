@@ -23,7 +23,7 @@ public class List extends Commands {
                 for (Player p : Main.get().getServer().getOnlinePlayers()) {
                     String text = ChatColor.GREEN + p.getDisplayName() + ChatColor.GRAY + " - " + "%races_race%";
                     text = PlaceholderAPI.setPlaceholders(p, text);
-                    p.sendMessage(text);
+                    sender.sendMessage(text);
                 }
                 break;
             default:

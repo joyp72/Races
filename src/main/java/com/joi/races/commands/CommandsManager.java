@@ -8,13 +8,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import com.joi.races.Main;
-import com.joi.races.Settings;
-import com.joi.races.control.MessageManager;
-import com.joi.races.control.MessageManager.MessageType;
 import com.joi.races.menus.Menus;
 
 import net.md_5.bungee.api.ChatColor;
@@ -23,8 +18,6 @@ public class CommandsManager implements CommandExecutor {
 
     private List<Commands> cmds;
     private static CommandsManager instance;
-    private Settings settings = Settings.get();
-    private MessageManager msgManager = MessageManager.get();
 
     static {
         instance = new CommandsManager();
@@ -40,11 +33,11 @@ public class CommandsManager implements CommandExecutor {
 
     public void setup() {
         Main.get().getCommand("races").setExecutor(this);
-        Main.get().getCommand("wings").setExecutor(this);
         cmds.add(new Set());
         cmds.add(new Get());
         cmds.add(new com.joi.races.commands.List());
         cmds.add(new Add());
+        cmds.add(new Wings());
     }
 
     @Override
@@ -53,35 +46,6 @@ public class CommandsManager implements CommandExecutor {
             return true;
         }
         Player p = (Player) sender;
-        if (cmd.getName().equalsIgnoreCase("wings")) {
-            if (!settings.hasRace(p)) {
-                msgManager.message(p, "You are not part of the Angel race.", MessageType.BAD);
-                return true;
-            }
-            if (!settings.getRace(p).equalsIgnoreCase("angel")) {
-                msgManager.message(p, "You are not part of the Angel race.", MessageType.BAD);
-                return true;
-            }
-            boolean wings = settings.getWings(p);
-            if (!wings) {
-                settings.setWings(p, true);
-                msgManager.message(p, "Wings toggled on.", MessageType.GOOD);
-                if (p.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                    return true;
-                }
-                PotionEffect e = new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0 , false, false);
-                p.addPotionEffect(e);
-                return true;
-            } else {
-                settings.setWings(p, false);
-                msgManager.message(p, "Wings toggled off.", MessageType.GOOD);
-                if (!p.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                    return true;
-                }
-                p.removePotionEffect(PotionEffectType.SLOW_FALLING);
-                return true;
-            }
-        }
         if (!cmd.getName().equalsIgnoreCase("races")) {
             return true;
         }
