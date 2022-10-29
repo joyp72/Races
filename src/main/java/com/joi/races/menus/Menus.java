@@ -3,6 +3,7 @@ package com.joi.races.menus;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
@@ -14,9 +15,11 @@ import org.bukkit.profile.PlayerProfile;
 
 import com.joi.races.Main;
 import com.joi.races.Settings;
+import com.joi.races.control.Timer;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -132,6 +135,34 @@ public class Menus {
             meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             angel.setItemMeta(meta);
             selector.setItem(20, angel);
+        }
+
+        if (settings.hasRace(p)) {
+            if (settings.getRace(p).equalsIgnoreCase("angel")) {
+                ItemStack wings = new ItemStack(Material.ELYTRA, 1);
+                {
+                    ItemMeta meta = wings.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + "" + ChatColor.BOLD + "Wings");
+                    ArrayList<String> lore = new ArrayList<>();
+                    if (settings.getWings(p)) {
+                        lore.add(ChatColor.GRAY + "(Click to deactivate)");
+                    } else {
+                        lore.add(ChatColor.GRAY + "(Click to activate)");
+                    }
+                    lore.add(" ");
+                    lore.add(ChatColor.WHITE + "Desc:");
+                    lore.add(ChatColor.GRAY + "Toggle slow falling");
+                    meta.addItemFlags(ItemFlag.values());
+                    meta.setLore(lore);
+                    wings.setItemMeta(meta);
+                    if (settings.getWings(p)) {
+                        wings.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2);
+                    }
+                    selector.setItem(29, wings);
+                }
+            } else {
+                selector.clear(29);
+            }
         }
 
         ItemStack merrow = new ItemStack(Material.PLAYER_HEAD, 1);
@@ -264,6 +295,46 @@ public class Menus {
             meta.setLore(lore);
             oni.setItemMeta(meta);
             selector.setItem(25, oni);
+        }
+
+        if (settings.hasRace(p)) {
+            if (settings.getRace(p).equalsIgnoreCase("oni")) {
+                ItemStack timer = new ItemStack(Material.GOLDEN_APPLE, 1);
+                {
+                    ItemMeta meta = timer.getItemMeta();
+                    meta.setDisplayName(ChatColor.WHITE + "" + ChatColor.BOLD + "Absorption");
+                    ArrayList<String> lore = new ArrayList<>();
+                    if (Timer.get().hasTimer(p.getUniqueId())) {
+                        lore.add(ChatColor.GRAY + "(On cooldown)");
+                    } else {
+                        lore.add(ChatColor.GRAY + "(Not on cooldown)");
+                    }
+                    lore.add(" ");
+                    lore.add(ChatColor.WHITE + "Time remaining:");
+                    if (Timer.get().hasTimer(p.getUniqueId())) {
+                        Duration dur = Duration.ofSeconds(Timer.get().getTime(p.getUniqueId()));
+                        String m = "" + (int)dur.toMinutes();
+                        String durS = "" + dur;
+                        String s1 = "0", s0 = "";
+                        if (durS.length() == 7 || durS.length() == 5) {
+                            s1 = durS.substring(durS.indexOf('S') - 2, durS.indexOf('S') - 1); 
+                        }
+                        s0 = durS.substring(durS.indexOf('S') - 1, durS.indexOf('S'));
+                        lore.add(ChatColor.GRAY + m + "m " + s1 + s0 + "s");
+                    } else {
+                        lore.add(ChatColor.GRAY + "--:--");
+                    }
+                    meta.addItemFlags(ItemFlag.values());
+                    meta.setLore(lore);
+                    timer.setItemMeta(meta);
+                    if (!Timer.get().hasTimer(p.getUniqueId())) {
+                        timer.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2);
+                    }
+                    selector.setItem(34, timer);
+                }
+            } else {
+                selector.clear(34);
+            }
         }
 
         ItemStack exit = new ItemStack(Material.BOOK, 1);
