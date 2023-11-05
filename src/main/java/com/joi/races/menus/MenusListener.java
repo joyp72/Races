@@ -21,7 +21,7 @@ public class MenusListener implements Listener {
     private static MenusListener instance;
     private Settings settings = Settings.get();
     private MessageManager msgManager = MessageManager.get();
-    private String[] displayNames = {"Pick your race below!", "Human", "Angel", "Merrow",
+    private String[] displayNames = {"Pick your race!", "Pick your race below!", "Human", "Angel", "Merrow",
                                      "Dragonborne", "Dwarf", "Oni", "Exit", "DISCLAIMER!", " ", "Wings", "Absorption"};
 
     static {
@@ -47,16 +47,9 @@ public class MenusListener implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        // If menu doesn't exist
-        if (Menus.getMenus() == null) {
-            return;
-        }
-        // If no no menus are registered
-        if (Menus.getMenus().isEmpty()) {
-            return;
-        }
         // If inventory doesn't belong to Races
-        if (!e.getView().getTitle().equalsIgnoreCase("Pick a race:")) {
+        if (!e.getView().getTitle().equalsIgnoreCase("Pick a race:") &&
+            !e.getView().getTitle().equalsIgnoreCase("Races")) {
             return;
         }
         // If item doesn't exist
@@ -111,6 +104,13 @@ public class MenusListener implements Listener {
             msgManager.message(p, "You joined the " + race + " race!", MessageManager.MessageType.GOOD);
             p.addPotionEffects(settings.getEffects(race.toLowerCase()));
             return;
+        }
+        // If item is named "Pick your race here!"
+        if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).equalsIgnoreCase("Pick your race!")) {
+                p.closeInventory();
+                new Menus(p);
+                p.openInventory(Menus.getMenus().get(p.getUniqueId()));
+                return;
         }
         // If item is named "exit"
         if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).equalsIgnoreCase("exit")) {

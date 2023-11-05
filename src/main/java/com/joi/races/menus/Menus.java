@@ -69,7 +69,7 @@ public class Menus {
             lore.add(" ");
             int amount = settings.getChangeTokens(p);
             String s = "You have " + ChatColor.RED + amount + ChatColor.GRAY + " Race Change token";
-            if (amount < 1 || amount > 1) {
+            if (amount != 1 && amount != -1) {
                 s = s + "s";
             }
             s = s + ".";

@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.joi.races.Main;
-import com.joi.races.menus.Menus;
+import com.joi.races.Settings;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -54,8 +59,49 @@ public class CommandsManager implements CommandExecutor {
                 p.sendMessage(ChatColor.RED + "Not enough permissions.");
                 return true;
             }
-            new Menus(p);
-            p.openInventory(Menus.getMenus().get(p.getUniqueId()));
+            Inventory ini = Bukkit.createInventory(p, 9, "Races");
+            ItemStack info = new ItemStack(Material.ENDER_EYE, 1);
+            {
+                ItemMeta meta = info.getItemMeta();
+                meta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Pick your race!");
+                ArrayList<String> lore = new ArrayList<>();
+                lore.add(" ");
+                lore.add(ChatColor.GRAY + "Click to choose");
+                lore.add(ChatColor.GRAY + "your race.");
+                meta.setLore(lore);
+                info.setItemMeta(meta);
+                ini.setItem(3, info);
+            }
+            ItemStack info2 = new ItemStack(Material.NETHER_STAR, 1);
+            {
+                ItemMeta meta = info2.getItemMeta();
+                meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "DISCLAIMER!");
+                ArrayList<String> lore = new ArrayList<>();
+                lore.add(ChatColor.GRAY + "Please pick your race wisely");
+                lore.add(ChatColor.GRAY + "as you will only get a number of");
+                lore.add(ChatColor.GRAY + "chances to change your race.");
+                lore.add(" ");
+                int amount = Settings.get().getChangeTokens(p);
+                String s = "You have " + ChatColor.RED + amount + ChatColor.GRAY + " Race Change token";
+                if (amount != 1 && amount != -1) {
+                    s = s + "s";
+                }
+                s = s + ".";
+                lore.add(ChatColor.GRAY + s);
+                meta.setLore(lore);
+                info2.setItemMeta(meta);
+                ini.setItem(5, info2);
+            }
+            while (ini.firstEmpty() >= 0) {
+                ItemStack pane = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
+                {
+                    ItemMeta meta = pane.getItemMeta();
+                    meta.setDisplayName(" ");
+                    pane.setItemMeta(meta);
+                    ini.setItem(ini.firstEmpty(), pane);
+                }
+            }
+            p.openInventory(ini);
         }else {
             Commands c = getCommand(args[0]);
             if (c != null) {
