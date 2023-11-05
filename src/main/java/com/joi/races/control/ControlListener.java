@@ -79,6 +79,9 @@ public class ControlListener implements Listener {
             if (!p.hasPotionEffect(effect.getType())) {
                 if (effect.getType().equals(PotionEffectType.ABSORPTION)
                     && left.contains(p.getUniqueId())) {
+                        if (timer.hasTimer(p.getUniqueId())) {
+                            timer.stopTimer(p.getUniqueId());
+                        }
                         timer.createTimer(p.getUniqueId(), 5 * 60);
                         timer.startTimer(p.getUniqueId());
                         left.remove(p.getUniqueId());

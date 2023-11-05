@@ -311,7 +311,7 @@ public class Menus {
                     }
                     lore.add(" ");
                     lore.add(ChatColor.WHITE + "Time remaining:");
-                    if (Timer.get().hasTimer(p.getUniqueId())) {
+                    if (Timer.get().hasTimer(p.getUniqueId()) && Timer.get().getTime(p.getUniqueId()) != -1) {
                         Duration dur = Duration.ofSeconds(Timer.get().getTime(p.getUniqueId()));
                         String m = "" + (int)dur.toMinutes();
                         String durS = "" + dur;

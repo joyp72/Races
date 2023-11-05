@@ -1,5 +1,6 @@
 package com.joi.races.commands;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.joi.races.Main;
 import com.joi.races.Settings;
+import com.joi.races.control.Timer;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -102,6 +104,17 @@ public class CommandsManager implements CommandExecutor {
                 }
             }
             p.openInventory(ini);
+            if (Timer.get().hasTimer(p.getUniqueId())) {
+                        Duration dur = Duration.ofSeconds(Timer.get().getTime(p.getUniqueId()));
+                        String m = "" + (int)dur.toMinutes();
+                        String durS = "" + dur;
+                        String s1 = "0", s0 = "";
+                        if (durS.length() == 7 || durS.length() == 5) {
+                            s1 = durS.substring(durS.indexOf('S') - 2, durS.indexOf('S') - 1); 
+                        }
+                        s0 = durS.substring(durS.indexOf('S') - 1, durS.indexOf('S'));
+                        Bukkit.getServer().getLogger().info(m + "m " + s1 + s0 + "s");
+                    }
         }else {
             Commands c = getCommand(args[0]);
             if (c != null) {

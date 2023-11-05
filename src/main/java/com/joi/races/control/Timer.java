@@ -37,17 +37,6 @@ public class Timer {
         }
     }
 
-    public void restartTimer(UUID id) {
-        if (cd.isEmpty()) {
-            return;
-        }
-        for (AbsorptionCountdown c : cd) {
-            if (c.getUUID().equals(id)) {
-                c.reset();
-            }
-        }
-    }
-
     public void stopTimer(UUID id) {
         if (cd.isEmpty()) {
             return;
@@ -58,7 +47,6 @@ public class Timer {
         }
         for (AbsorptionCountdown c : clone) {
             if (c.getUUID().equals(id)) {
-                c.cancel();
                 cd.remove(c);
             }
         }

@@ -33,7 +33,7 @@ public class ControlExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "1";
+        return "1.4";
     }
 
     @Override

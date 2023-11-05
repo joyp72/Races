@@ -36,10 +36,6 @@ public class AbsorptionCountdown extends BukkitRunnable {
         p.addPotionEffect(effect);
      }
 
-     public void reset() {
-        time = 0;
-     }
-
     @Override
     public void run() {
         if (!player.isOnline()) {
