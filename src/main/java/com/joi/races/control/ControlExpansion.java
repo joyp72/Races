@@ -49,7 +49,7 @@ public class ControlExpansion extends PlaceholderExpansion {
             race = race.substring(0,1).toUpperCase() + race.substring(1).toLowerCase();
             switch (race) {
                 case "Human":
-                    race = ChatColor.AQUA + race;
+                    race = ChatColor.DARK_AQUA + race;
                     break;
                 case "Angel":
                     race = ChatColor.YELLOW + race;
@@ -61,10 +61,10 @@ public class ControlExpansion extends PlaceholderExpansion {
                     race = ChatColor.DARK_PURPLE + race;
                     break;
                 case "Dwarf":
-                    race = ChatColor.GOLD + race;
+                    race = ChatColor.GRAY + race;
                     break;
                 case "Oni":
-                    race = ChatColor.RED + race;
+                    race = ChatColor.DARK_RED + race;
                     break;
                 default:
                     break;
