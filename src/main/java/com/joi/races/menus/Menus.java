@@ -83,7 +83,7 @@ public class Menus {
         {
             // ItemMeta meta = human.getItemMeta();
             SkullMeta meta = (SkullMeta) human.getItemMeta();
-            meta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Human");
+            meta.setDisplayName(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Human");
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
@@ -245,7 +245,7 @@ public class Menus {
             PlayerProfile profile = p.getServer().createPlayerProfile(uuid);
             profile.getTextures().setSkin(url);
             meta.setOwnerProfile(profile);
-            meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Dwarf");
+            meta.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Dwarf");
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
@@ -278,7 +278,7 @@ public class Menus {
             PlayerProfile profile = p.getServer().createPlayerProfile(uuid);
             profile.getTextures().setSkin(url);
             meta.setOwnerProfile(profile);
-            meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Oni");
+            meta.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Oni");
             ArrayList<String> lore = new ArrayList<>();
             lore.add(ChatColor.GRAY + "Click to join race!");
             lore.add(" ");
