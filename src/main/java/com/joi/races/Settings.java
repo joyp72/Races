@@ -13,18 +13,22 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class Settings {
 
     private static Settings instance;
     private Plugin plugin;
     private File dbFile;
     private FileConfiguration dbConfig;
-    private File effectsFile;
-    private FileConfiguration effectsConfig;
+    private File RacesFile;
+    private FileConfiguration racesConfig;
     private String racePath = ".race";
+    private String raceEffectsPath = ".effects";
+    private String raceColorPath = ".color";
     private String changeTokensPath = ".changeTokens";
     private String wingsPath = ".wings";
-    private String[] races = {"human", "angel", "merrow", "dragonborne", "dwarf", "oni"};
+    private String[] defaultRaces = {"human", "angel", "merrow", "dragonborne", "dwarf", "oni"};
 
     static {
         instance = new Settings();
@@ -50,26 +54,27 @@ public class Settings {
         }
         dbConfig = (FileConfiguration) YamlConfiguration.loadConfiguration(dbFile);
 
-        effectsFile = new File(p.getDataFolder() + "/effects.yml");
-        if (!effectsFile.exists()) {
+        RacesFile = new File(p.getDataFolder() + "/races.yml");
+        if (!RacesFile.exists()) {
             try {
-                effectsFile.createNewFile();
+                RacesFile.createNewFile();
             } catch (Exception e) {
                 p.getLogger().info("Failed to generate effects file!");
                 e.printStackTrace();
             }
-            effectsConfig = (FileConfiguration) YamlConfiguration.loadConfiguration(effectsFile);
-            for (String s : races) {
-                effectsConfig.set(s, addDefaults(s));
+            racesConfig = (FileConfiguration) YamlConfiguration.loadConfiguration(RacesFile);
+            for (String s : defaultRaces) {
+                racesConfig.set(s + raceColorPath, getDefaultColor(s));
+                racesConfig.set(s + raceEffectsPath, addDefaultEffects(s));
             }
             try {
-                effectsConfig.save(effectsFile);
+                racesConfig.save(RacesFile);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return;
         }
-        effectsConfig = (FileConfiguration) YamlConfiguration.loadConfiguration(effectsFile);
+        racesConfig = (FileConfiguration) YamlConfiguration.loadConfiguration(RacesFile);
     }
 
     public void resetDB() {
@@ -186,7 +191,7 @@ public class Settings {
 
     public List<PotionEffect> getEffects(String race) {
         List<PotionEffect> effects = new ArrayList<PotionEffect>();
-        for (String s : effectsConfig.getStringList(race)) {
+        for (String s : racesConfig.getStringList(race + raceEffectsPath)) {
             PotionEffectType effectType = PotionEffectType.getByName(s);
             if (effectType.equals(PotionEffectType.HEALTH_BOOST) || effectType.equals(PotionEffectType.ABSORPTION)) {
                 PotionEffect e = new PotionEffect(effectType, Integer.MAX_VALUE, 1 , false, false);
@@ -197,6 +202,22 @@ public class Settings {
             effects.add(e);
         }
         return effects;
+    }
+
+    public ArrayList<String> getRaces() {
+        ArrayList<String> races = new ArrayList<String>();
+        for (String s: racesConfig.getKeys(false)) {
+            races.add(s);
+        }
+        return races;
+    }
+
+    public char getRaceColor(String race) {
+        return (racesConfig.getString(race.toLowerCase() + raceColorPath)).charAt(1);
+    }
+
+    public boolean isRace(String race) {
+        return getRaces().contains(race);
     }
 
     public ConfigurationSection getConfigSectionDB() {
@@ -217,14 +238,34 @@ public class Settings {
         return this.plugin;
     }
 
-    public boolean isRace(String race) {
-        for (String s : races) {
-            if (s.equals(race)) {return true;}
+    public String getDefaultColor(String race) {
+        String color = ChatColor.RESET.toString();
+        switch (race) {
+            case "human":
+                color = ChatColor.DARK_AQUA.toString();
+                break;
+            case "angel":
+                color = ChatColor.YELLOW.toString();
+                break;
+            case "merrow":
+                color = ChatColor.BLUE.toString();
+                break;
+            case "dragonborne":
+                color = ChatColor.DARK_PURPLE.toString();
+                break;
+            case "dwarf":
+                color = ChatColor.GRAY.toString();
+                break;
+            case "oni":
+                color = ChatColor.DARK_RED.toString();
+                break;
+            default:
+                break;
         }
-        return false;
+        return color;
     }
 
-    public List<String> addDefaults(String race) {
+    public List<String> addDefaultEffects(String race) {
         List<String> effects = new ArrayList<String>();
         switch (race) {
             case "human":

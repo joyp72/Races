@@ -35,7 +35,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>/Users/school/Desktop/Code/Server/plugins</outputDirectory>
+                    <outputDirectory>\Users\kokpa\Documents\Code\Server\plugins</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>

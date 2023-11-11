@@ -25,3 +25,6 @@ commands:
   races wings:
     usage: "Usage: /races wings"
     description: Toggle wings on/off.
+  races test:
+    usage: "Usage: /races test"
+    description: Test command.
