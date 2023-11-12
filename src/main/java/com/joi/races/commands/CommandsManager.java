@@ -45,7 +45,6 @@ public class CommandsManager implements CommandExecutor {
         cmds.add(new com.joi.races.commands.New());
         cmds.add(new Remove());
         cmds.add(new Wings());
-        cmds.add(new Test());
     }
 
     @Override

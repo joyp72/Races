@@ -516,14 +516,14 @@ public class Settings {
                 break;
             case "dragonborne":
                 effects.add(PotionEffectType.DAMAGE_RESISTANCE.getName());
-                effects.add(PotionEffectType.FIRE_RESISTANCE.getName());
+                effects.add(PotionEffectType.INCREASE_DAMAGE.getName());
                 break;
             case "dwarf":
                 effects.add(PotionEffectType.FAST_DIGGING.getName());
                 effects.add(PotionEffectType.NIGHT_VISION.getName());
                 break;
             case "oni":
-                effects.add(PotionEffectType.INCREASE_DAMAGE.getName());
+                effects.add(PotionEffectType.FIRE_RESISTANCE.getName());
                 effects.add(PotionEffectType.ABSORPTION.getName());
                 break;
             default:
