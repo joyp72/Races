@@ -33,7 +33,7 @@ public class ControlExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "1.4";
+        return "1.6";
     }
 
     @Override
@@ -47,7 +47,10 @@ public class ControlExpansion extends PlaceholderExpansion {
             }
             String race = settings.getRace(player.getUniqueId());
             race = race.substring(0,1).toUpperCase() + race.substring(1).toLowerCase();
-            ChatColor color = ChatColor.getByChar(settings.getRaceColor(race));
+            if (settings.getRaceColor(race.toLowerCase()) == null) {
+                return race;
+            }
+            ChatColor color = settings.getRaceColor(race.toLowerCase());
             return color + race;
         }
         if (params.equalsIgnoreCase("tokens")) {

@@ -42,6 +42,9 @@ public class MenusListener implements Listener {
                 return true;
             }
         }
+        if (settings.isRace(displayName.toLowerCase())) {
+            return true;
+        }
         return false;
     }
 

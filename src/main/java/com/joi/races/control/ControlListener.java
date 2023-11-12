@@ -69,6 +69,15 @@ public class ControlListener implements Listener {
             return;
         }
         String race = (String) settings.getRace(p);
+        if (p.getActivePotionEffects() != null) {
+            for (PotionEffect effect : p.getActivePotionEffects()) {
+                if (!settings.getEffectTypes(race).contains(effect.getType())) {
+                    if (effect.getDuration() > 1000000) {
+                        p.removePotionEffect(effect.getType());
+                    }
+                }
+            }
+        }
         for (PotionEffect effect : settings.getEffects(race)) {
             if (effect.getType().equals(PotionEffectType.SLOW_FALLING) && race.equalsIgnoreCase("angel") && !settings.getWings(p)) {
                 continue;

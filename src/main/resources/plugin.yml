@@ -1,6 +1,6 @@
 name: Races
 author: joii_
-version: 1.5
+version: 1.6
 api-version: 1.19
 main: com.joi.races.Main
 
@@ -11,14 +11,20 @@ commands:
     usage: "Usage: /races"
     description: Open Races GUI.
   races set:
-    usage: "Usage: /races set [race | tokens] <player> <value>"
-    description: Set data for a player.
+    usage: "Usage: /races set [race/tokens/color/head]"
+    description: Set data for a race or player.
   races add:
-    usage: "Usage: /races add tokens <player> <value>"
-    description: Add to a player's tokens.
+    usage: "Usage: /races add [effect/tokens]"
+    description: Add to effects or a player's tokens.
+  races new:
+    usage: "Usage: /races new [race] <name>"
+    description: Add a new race.
+  races remove:
+    usage: "Usage: /races remove [race/effect]"
+    description: Remove a race or effect.
   races get:
-    usage: "Usage: /races get [race | tokens] <player>"
-    description: Get data for player.
+    usage: "Usage: /races get [race/tokens/effects]"
+    description: Get info for a race or player.
   races list:
     usage: "Usage: /races list"
     description: Display a list of online players and their race.

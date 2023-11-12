@@ -42,6 +42,8 @@ public class CommandsManager implements CommandExecutor {
         cmds.add(new Get());
         cmds.add(new com.joi.races.commands.List());
         cmds.add(new Add());
+        cmds.add(new com.joi.races.commands.New());
+        cmds.add(new Remove());
         cmds.add(new Wings());
         cmds.add(new Test());
     }

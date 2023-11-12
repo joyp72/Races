@@ -1,4 +1,5 @@
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\control\AbsorptionCountdown.java
+C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\Remove.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\Commands.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\Get.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\Set.java
@@ -9,6 +10,7 @@ C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\List.ja
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\CommandsManager.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\Add.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\Settings.java
+C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\commands\New.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\control\ControlListener.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\menus\Menus.java
 C:\Users\kokpa\Documents\Code\Races\src\main\java\com\joi\races\Main.java

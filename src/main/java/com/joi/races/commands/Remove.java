@@ -3,17 +3,16 @@ package com.joi.races.commands;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
-import com.joi.races.Main;
 import com.joi.races.Settings;
 import com.joi.races.control.MessageManager;
 import com.joi.races.control.MessageManager.MessageType;
 
-public class Add extends Commands {
+public class Remove extends Commands {
 
     private Settings settings = Settings.get();
 
-    public Add() {
-        super("races.admin", "Add to effects or a player's tokens", "/races add [effect/tokens]", new String[] { " " });
+    public Remove() {
+        super("races.admin", "Remove a race or effect", "/races remove [race/effect]", new String[] { " " });
     }
 
     @Override
@@ -23,13 +22,30 @@ public class Add extends Commands {
                 MessageManager.get().message(sender, "Proper usage: " + getUsage(), MessageType.BAD);
                 break;
             case 1:
+                switch (args[0]) {
+                    case "race":
+                        MessageManager.get().message(sender, "Proper usage: " + "/races remove race <race>", MessageType.BAD);
+                        break;
+                    default:
+                        break;
+                }
+                if (args[0].equalsIgnoreCase("race")) {
+                    break;
+                }
             case 2:
                 switch (args[0]) {
-                    case "effect":
-                        MessageManager.get().message(sender, "Proper usage: " + "/races add effect <race> <potion effect>", MessageType.BAD);
+                    case "race":
+                        String race = args[1];
+                        race = race.substring(0,1).toUpperCase() + race.substring(1).toLowerCase();
+                        if (!settings.isRace(race.toLowerCase())) {
+                            MessageManager.get().message(sender, "Invalid race.", MessageType.BAD);
+                            break;
+                        }
+                        settings.removeRace(race.toLowerCase());
+                        MessageManager.get().message(sender, "Removed " + race + " race.", MessageType.GOOD);
                         break;
-                    case "tokens":
-                        MessageManager.get().message(sender, "Proper usage: " + "/races add tokens <player> <amount>", MessageType.BAD);
+                    case "effect":
+                        MessageManager.get().message(sender, "Proper usage: " + "/races remove effect <race> <effect>", MessageType.BAD);
                         break;
                     default:
                         MessageManager.get().message(sender, "Proper usage: " + getUsage(), MessageType.BAD);
@@ -50,28 +66,12 @@ public class Add extends Commands {
                             break;
                         }
                         PotionEffectType effectType = PotionEffectType.getByName(args[2]);
-                        if (settings.getEffectTypes(race.toLowerCase()).contains(effectType)) {
-                            MessageManager.get().message(sender, args[2] + " is already included for " + race + " race.", MessageType.BAD);
+                        if (!settings.getEffectTypes(race.toLowerCase()).contains(effectType)) {
+                            MessageManager.get().message(sender, args[2] + " is already not included for " + race + " race.", MessageType.BAD);
                             break;
                         }
-                        settings.addEffectType(race.toLowerCase(), effectType);
-                        MessageManager.get().message(sender, args[2] + " added to " + race + " race.", MessageType.GOOD);
-                        break;
-                    case "tokens":
-                        Player p = Main.get().getServer().getPlayerExact(args[1]);
-                        if (p == null) {
-                            MessageManager.get().message(sender, "Invalid player.", MessageType.BAD);
-                            break;
-                        }
-                        int value;
-                        try {
-                            value = Integer.parseInt(args[2]);
-                        } catch (NumberFormatException e) {
-                            MessageManager.get().message(sender, "Invalid amount.", MessageType.BAD);
-                            break;
-                        }
-                        settings.setChangeTokens(p, settings.getChangeTokens(p) + value);
-                        MessageManager.get().message(sender, p.getDisplayName() + " now has " + settings.getChangeTokens(p) + " tokens.", MessageType.GOOD);
+                        settings.removeEffectType(race.toLowerCase(), effectType);
+                        MessageManager.get().message(sender, args[2] + " removed from " + race + " race.", MessageType.GOOD);
                         break;
                     default:
                         MessageManager.get().message(sender, "Proper usage: " + getUsage(), MessageType.BAD);
@@ -79,7 +79,6 @@ public class Add extends Commands {
                 }
                 break;
             default:
-                MessageManager.get().message(sender, "Proper usage: " + getUsage(), MessageType.BAD);
                 break;
         }
     }
