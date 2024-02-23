@@ -30,7 +30,7 @@ public class Timer {
         if (cd.isEmpty()) {
             return;
         }
-        for (int i = 0; i < cd.size() - 1; i++) {
+        for (int i = 0; i <= cd.size() - 1; i++) {
             if (cd.get(i).getUUID().equals(id)) {
                 cd.get(i).run();
             }
