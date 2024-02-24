@@ -22,7 +22,8 @@ public class MenusListener implements Listener {
     private Settings settings = Settings.get();
     private MessageManager msgManager = MessageManager.get();
     private String[] displayNames = {"Pick your race!", "Pick your race below!", "Human", "Angel", "Merrow",
-                                     "Dragonborne", "Dwarf", "Oni", "Exit", "DISCLAIMER!", " ", "Wings", "Absorption"};
+                                     "Dragonborne", "Dwarf", "Oni", "Exit", "DISCLAIMER!", " ", "Wings", "Absorption",
+                                     "Night Vision"};
 
     static {
         instance = new MenusListener();
@@ -152,6 +153,42 @@ public class MenusListener implements Listener {
                     return;
                 }
                 p.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                p.closeInventory();
+                return;
+            }
+        }
+        // If item is named "night vision"
+        if (ChatColor.stripColor(item.getItemMeta().getDisplayName()).equalsIgnoreCase("Night Vision")) {
+            if (!settings.hasRace(p)) {
+                msgManager.message(p, "You are not part of the Dwarf race.", MessageType.BAD);
+                p.closeInventory();
+                return;
+            }
+            if (!settings.getRace(p).equalsIgnoreCase("dwarf")) {
+                msgManager.message(p, "You are not part of the Dwarf race.", MessageType.BAD);
+                p.closeInventory();
+                return;
+            }
+            boolean vision = settings.getNight_Vision(p);
+            if (!vision) {
+                settings.setNight_Vision(p, true);
+                msgManager.message(p, "Night Vision toggled on.", MessageType.GOOD);
+                if (p.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                    p.closeInventory();
+                    return;
+                }
+                PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0 , false, false);
+                p.addPotionEffect(effect);
+                p.closeInventory();
+                return;
+            } else {
+                settings.setNight_Vision(p, false);
+                msgManager.message(p, "Night Vision toggled off.", MessageType.GOOD);
+                if (!p.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                    p.closeInventory();
+                    return;
+                }
+                p.removePotionEffect(PotionEffectType.NIGHT_VISION);
                 p.closeInventory();
                 return;
             }

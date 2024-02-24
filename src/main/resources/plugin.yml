@@ -1,6 +1,6 @@
 name: Races
 author: joii_
-version: 1.7
+version: 1.8
 api-version: 1.19
 main: com.joi.races.Main
 
@@ -31,3 +31,6 @@ commands:
   races wings:
     usage: "Usage: /races wings"
     description: Toggle wings on/off.
+  races vision:
+    usage: "Usage: /races vision"
+    description: Toggle night vision on/off.

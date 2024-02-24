@@ -32,6 +32,7 @@ public class Settings {
     private String raceGuiIndexPath = ".GuiIndex";
     private String changeTokensPath = ".changeTokens";
     private String wingsPath = ".wings";
+    private String visionPath = ".night_vision";
     private String[] defaultRaces = {"human", "angel", "merrow", "dragonborne", "dwarf", "oni"};
 
     static {
@@ -146,6 +147,40 @@ public class Settings {
             return true;
         }
         return dbConfig.getBoolean(id + wingsPath);
+    }
+
+    public void setNight_Vision(Player p, boolean value) {
+        dbConfig.set(p.getUniqueId().toString() + visionPath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setNight_Vision(UUID id, boolean value) {
+        dbConfig.set(id.toString() + visionPath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean getNight_Vision(Player p) {
+        if (!dbConfig.contains(p.getUniqueId() + visionPath)) {
+            setWings(p, true);
+            return true;
+        }
+        return dbConfig.getBoolean(p.getUniqueId() + visionPath);
+    }
+
+    public boolean getNight_Vision(UUID id) {
+        if (!dbConfig.contains(id + visionPath)) {
+            setWings(id, true);
+            return true;
+        }
+        return dbConfig.getBoolean(id + visionPath);
     }
 
     public void setChangeTokens(Player p, int value) {
