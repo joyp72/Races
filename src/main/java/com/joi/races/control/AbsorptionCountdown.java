@@ -32,6 +32,9 @@ public class AbsorptionCountdown extends BukkitRunnable {
         if (!Settings.get().getRace(p).equalsIgnoreCase("oni")) {
             return;
         }
+        if (p.hasPotionEffect(PotionEffectType.ABSORPTION)) {
+            return;
+        }
         PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 1 , false, false);
         p.addPotionEffect(effect);
      }
