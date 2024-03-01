@@ -31,11 +31,11 @@ public class Wings extends Commands {
             boolean wings = settings.getWings(p);
             if (!wings) {
                 settings.setWings(p, true);
-                msgManager.message(p, "Fall damage toggled on.", MessageType.GOOD);
+                msgManager.message(p, "Fall damage toggled off.", MessageType.GOOD);
                 break;
             } else {
                 settings.setWings(p, false);
-                msgManager.message(p, "Fall damage toggled off.", MessageType.GOOD);
+                msgManager.message(p, "Fall damage toggled on.", MessageType.GOOD);
                 break;
             }
             default:
