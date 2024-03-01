@@ -1,8 +1,6 @@
 package com.joi.races.commands;
 
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import com.joi.races.Settings;
 import com.joi.races.control.MessageManager;
@@ -14,7 +12,7 @@ public class Wings extends Commands {
     private MessageManager msgManager = MessageManager.get();
 
     public Wings() {
-        super("races.default", "Toggle wings on/off", "/races wings", new String[] { "" });
+        super("races.default", "Toggle fall damage on/off", "/races wings", new String[] { "" });
     }
 
     @Override
@@ -33,20 +31,11 @@ public class Wings extends Commands {
             boolean wings = settings.getWings(p);
             if (!wings) {
                 settings.setWings(p, true);
-                msgManager.message(p, "Wings toggled on.", MessageType.GOOD);
-                if (p.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                    break;
-                }
-                PotionEffect e = new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0 , false, false);
-                p.addPotionEffect(e);
+                msgManager.message(p, "Fall damage toggled on.", MessageType.GOOD);
                 break;
             } else {
                 settings.setWings(p, false);
-                msgManager.message(p, "Wings toggled off.", MessageType.GOOD);
-                if (!p.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                    break;
-                }
-                p.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                msgManager.message(p, "Fall damage toggled off.", MessageType.GOOD);
                 break;
             }
             default:

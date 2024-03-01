@@ -137,6 +137,9 @@ public class Menus {
                     effectName = effectName.replace("_", " ");
                     lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + effectName);
                 }
+                if (race.equalsIgnoreCase("angel")) {
+                    lore.add(ChatColor.GRAY + "- " + ChatColor.DARK_GREEN + "Fall damange negation");
+                }
                 meta.setLore(lore);
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -158,7 +161,7 @@ public class Menus {
                         lore.add(ChatColor.GRAY + "(Click to activate)");
                     }
                     lore.add(" ");
-                    lore.add(ChatColor.GRAY + "Toggle slow falling");
+                    lore.add(ChatColor.GRAY + "Toggle fall damage negation");
                     meta.addItemFlags(ItemFlag.values());
                     meta.setLore(lore);
                     wings.setItemMeta(meta);

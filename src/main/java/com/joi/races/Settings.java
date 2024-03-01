@@ -88,6 +88,11 @@ public class Settings {
                 racesConfig.set(s + raceEffectsPath, getDefaultEffects(s));
             }
         }
+        List<String> effectList = racesConfig.getStringList("angel" + raceEffectsPath);
+        if (effectList.contains(PotionEffectType.SLOW_FALLING.getName())) {
+            effectList.remove(PotionEffectType.SLOW_FALLING.getName());
+            racesConfig.set("angel" + raceEffectsPath, effectList);
+        }
         try {
             racesConfig.save(RacesFile);
         } catch (Exception e) {
@@ -542,7 +547,6 @@ public class Settings {
                 effects.add(PotionEffectType.HERO_OF_THE_VILLAGE.getName());
                 break;
             case "angel":
-                effects.add(PotionEffectType.SLOW_FALLING.getName());
                 effects.add(PotionEffectType.HEALTH_BOOST.getName());
                 break;
             case "merrow":

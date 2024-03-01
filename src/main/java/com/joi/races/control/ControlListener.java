@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -126,6 +127,13 @@ public class ControlListener implements Listener {
             return;
         }
         String race = (String) settings.getRace(p);
+
+        if (race.equalsIgnoreCase("angel") && e.getCause() == DamageCause.FALL) {
+            if (settings.getWings(p)) {
+                e.setCancelled(true);
+            }
+            return;
+        } 
 
         if (!race.equalsIgnoreCase("oni") || p.getAbsorptionAmount() == 0) {
             return;

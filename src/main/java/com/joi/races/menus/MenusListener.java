@@ -136,23 +136,12 @@ public class MenusListener implements Listener {
             boolean wings = settings.getWings(p);
             if (!wings) {
                 settings.setWings(p, true);
-                msgManager.message(p, "Wings toggled on.", MessageType.GOOD);
-                if (p.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                    p.closeInventory();
-                    return;
-                }
-                PotionEffect effect = new PotionEffect(PotionEffectType.SLOW_FALLING, Integer.MAX_VALUE, 0 , false, false);
-                p.addPotionEffect(effect);
+                msgManager.message(p, "Fall damage toggled on.", MessageType.GOOD);
                 p.closeInventory();
                 return;
             } else {
                 settings.setWings(p, false);
-                msgManager.message(p, "Wings toggled off.", MessageType.GOOD);
-                if (!p.hasPotionEffect(PotionEffectType.SLOW_FALLING)) {
-                    p.closeInventory();
-                    return;
-                }
-                p.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                msgManager.message(p, "Fall damage toggled off.", MessageType.GOOD);
                 p.closeInventory();
                 return;
             }

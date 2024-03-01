@@ -1,6 +1,6 @@
 name: Races
 author: joii_
-version: 1.8
+version: 1.9
 api-version: 1.19
 main: com.joi.races.Main
 
@@ -30,7 +30,7 @@ commands:
     description: Display a list of online players and their race.
   races wings:
     usage: "Usage: /races wings"
-    description: Toggle wings on/off.
+    description: Toggle fall damage on/off.
   races vision:
     usage: "Usage: /races vision"
     description: Toggle night vision on/off.
