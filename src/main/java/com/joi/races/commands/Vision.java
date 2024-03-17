@@ -37,7 +37,7 @@ public class Vision extends Commands {
                 if (p.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
                     break;
                 }
-                PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0 , false, false);
+                PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, -1, 0 , false, false);
                 p.addPotionEffect(effect);
                 break;
             } else {

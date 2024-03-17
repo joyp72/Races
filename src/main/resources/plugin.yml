@@ -1,6 +1,6 @@
 name: Races
 author: joii_
-version: 1.9
+version: 2
 api-version: 1.19
 main: com.joi.races.Main
 

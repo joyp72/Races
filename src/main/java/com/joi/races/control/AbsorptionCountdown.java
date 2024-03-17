@@ -35,7 +35,7 @@ public class AbsorptionCountdown extends BukkitRunnable {
         if (p.hasPotionEffect(PotionEffectType.ABSORPTION)) {
             return;
         }
-        PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, Integer.MAX_VALUE, 1 , false, false);
+        PotionEffect effect = new PotionEffect(PotionEffectType.ABSORPTION, -1, 1 , false, false);
         p.addPotionEffect(effect);
      }
 

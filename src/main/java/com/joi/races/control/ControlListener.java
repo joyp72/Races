@@ -56,8 +56,8 @@ public class ControlListener implements Listener {
             @Override
             public void run() {
                 p.addPotionEffects(settings.getEffects(race));
-                if (race.equalsIgnoreCase("angel") && !settings.getWings(p)) {
-                    p.removePotionEffect(PotionEffectType.SLOW_FALLING);
+                if (race.equalsIgnoreCase("dwarf") && !settings.getNight_Vision(p)) {
+                    p.removePotionEffect(PotionEffectType.NIGHT_VISION);
                 }
             }
         }.runTaskLater(Main.get(), 5L);
@@ -73,16 +73,17 @@ public class ControlListener implements Listener {
         if (p.getActivePotionEffects() != null) {
             for (PotionEffect effect : p.getActivePotionEffects()) {
                 if (!settings.getEffectTypes(race).contains(effect.getType())) {
-                    if (effect.getDuration() > 1000000) {
+                    if (effect.getDuration() > 1000000 || effect.getDuration() == -1) {
                         p.removePotionEffect(effect.getType());
                     }
                 }
             }
         }
         for (PotionEffect effect : settings.getEffects(race)) {
-            if (effect.getType().equals(PotionEffectType.SLOW_FALLING) && race.equalsIgnoreCase("angel") && !settings.getWings(p)) {
+            if (effect.getType().equals(PotionEffectType.NIGHT_VISION) && race.equalsIgnoreCase("dwarf") && !settings.getNight_Vision(p)) {
                 continue;
             }
+
             if (effect.getType().equals(PotionEffectType.ABSORPTION) && p.getAbsorptionAmount() > 0) {
                 continue;
             }

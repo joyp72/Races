@@ -166,7 +166,7 @@ public class MenusListener implements Listener {
                     p.closeInventory();
                     return;
                 }
-                PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 0 , false, false);
+                PotionEffect effect = new PotionEffect(PotionEffectType.NIGHT_VISION, -1, 0 , false, false);
                 p.addPotionEffect(effect);
                 p.closeInventory();
                 return;

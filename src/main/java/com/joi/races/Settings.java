@@ -255,11 +255,11 @@ public class Settings {
             }
             PotionEffectType effectType = PotionEffectType.getByName(s);
             if (effectType.equals(PotionEffectType.HEALTH_BOOST) || effectType.equals(PotionEffectType.ABSORPTION)) {
-                PotionEffect e = new PotionEffect(effectType, Integer.MAX_VALUE, 1 , false, false);
+                PotionEffect e = new PotionEffect(effectType, -1, 1 , false, false);
                 effects.add(e);
                 continue;
             }
-            PotionEffect e = new PotionEffect(effectType, Integer.MAX_VALUE, 0 , false, false);
+            PotionEffect e = new PotionEffect(effectType, -1, 0 , false, false);
             effects.add(e);
         }
         return effects;
@@ -335,7 +335,7 @@ public class Settings {
             if (p.hasPotionEffect(effectType)) {
                 p.removePotionEffect(effectType);
             }
-            PotionEffect effect = new PotionEffect(effectType, Integer.MAX_VALUE, 0 , false, false);
+            PotionEffect effect = new PotionEffect(effectType, -1, 0 , false, false);
             p.addPotionEffect(effect);
         }
         return;
