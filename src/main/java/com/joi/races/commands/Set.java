@@ -18,7 +18,7 @@ public class Set extends Commands {
    private Settings settings = Settings.get();
 
     public Set() {
-        super("races.admin", "Set data for a race or player", "/races set [race/tokens/color/head]", new String[] { "" });
+        super("races.admin", "Set data for a race or player", "/races set [race/tokens/color/head/fpcap]", new String[] { "" });
     }
 
     @Override
@@ -41,6 +41,9 @@ public class Set extends Commands {
                         break;
                     case "head":
                         MessageManager.get().message(sender, "Proper usage: " + "/races set head <race> <skin URL>", MessageType.BAD);
+                        break;
+                    case "fpcap":
+                        MessageManager.get().message(sender, "Proper usage: " + "/races set fpcap <player> <amount>", MessageType.BAD);
                         break;
                     default:
                         MessageManager.get().message(sender, "Proper usage: " + getUsage(), MessageType.BAD);
@@ -95,6 +98,24 @@ public class Set extends Commands {
                         }
                         settings.setChangeTokens(p, value);
                         MessageManager.get().message(sender, "# of tokens for " + p.getDisplayName() + " set to " + value + ".", MessageType.GOOD);
+                        break;
+                    }
+                    case "fpcap":
+                    {
+                        Player p = Main.get().getServer().getPlayerExact(args[1]);
+                        if (p == null) {
+                            MessageManager.get().message(sender, "Invalid player.", MessageType.BAD);
+                            break;
+                        }
+                        int value;
+                        try {
+                            value = Integer.parseInt(args[2]);
+                        } catch (NumberFormatException e) {
+                            MessageManager.get().message(sender, "Invalid amount.", MessageType.BAD);
+                            break;
+                        }
+                        settings.setfpCap(p, value);
+                        MessageManager.get().message(sender, "FP cap for " + p.getDisplayName() + " set to " + value + ".", MessageType.GOOD);
                         break;
                     }
                     case "color":

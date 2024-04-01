@@ -13,7 +13,7 @@ public class Add extends Commands {
     private Settings settings = Settings.get();
 
     public Add() {
-        super("races.admin", "Add to effects or a player's tokens", "/races add [effect/tokens]", new String[] { " " });
+        super("races.admin", "Add to effects or a player's data", "/races add [effect/tokens/fpcap]", new String[] { " " });
     }
 
     @Override
@@ -30,6 +30,9 @@ public class Add extends Commands {
                         break;
                     case "tokens":
                         MessageManager.get().message(sender, "Proper usage: " + "/races add tokens <player> <amount>", MessageType.BAD);
+                        break;
+                    case "fpcap":
+                        MessageManager.get().message(sender, "Proper usage: " + "/races add fpcap <player> <amount>", MessageType.BAD);
                         break;
                     default:
                         MessageManager.get().message(sender, "Proper usage: " + getUsage(), MessageType.BAD);
@@ -72,6 +75,22 @@ public class Add extends Commands {
                         }
                         settings.setChangeTokens(p, settings.getChangeTokens(p) + value);
                         MessageManager.get().message(sender, p.getDisplayName() + " now has " + settings.getChangeTokens(p) + " tokens.", MessageType.GOOD);
+                        break;
+                    case "fpcap":
+                        Player player = Main.get().getServer().getPlayerExact(args[1]);
+                        if (player == null) {
+                            MessageManager.get().message(sender, "Invalid player.", MessageType.BAD);
+                            break;
+                        }
+                        int val;
+                        try {
+                            val = Integer.parseInt(args[2]);
+                        } catch (NumberFormatException e) {
+                            MessageManager.get().message(sender, "Invalid amount.", MessageType.BAD);
+                            break;
+                        }
+                        settings.setfpCap(player, settings.getfpCap(player) + val);
+                        MessageManager.get().message(sender, player.getDisplayName() + " now has " + settings.getfpCap(player) + " FP cap.", MessageType.GOOD);
                         break;
                     default:
                         MessageManager.get().message(sender, "Proper usage: " + getUsage(), MessageType.BAD);

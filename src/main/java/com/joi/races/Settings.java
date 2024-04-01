@@ -15,6 +15,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.joi.races.control.Data;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class Settings {
@@ -25,6 +27,8 @@ public class Settings {
     private FileConfiguration dbConfig;
     private File RacesFile;
     private FileConfiguration racesConfig;
+    private File AbilitiesFile;
+    private FileConfiguration abilitiesConfig;
     private String racePath = ".race";
     private String raceEffectsPath = ".effects";
     private String raceColorPath = ".color";
@@ -33,7 +37,9 @@ public class Settings {
     private String changeTokensPath = ".changeTokens";
     private String wingsPath = ".wings";
     private String visionPath = ".night_vision";
+    private String fpCapPath = ".fp_cap";
     private String[] defaultRaces = {"human", "angel", "merrow", "dragonborne", "dwarf", "oni"};
+    private String[] abilities = {"firebreath"};
 
     static {
         instance = new Settings();
@@ -154,6 +160,43 @@ public class Settings {
         return dbConfig.getBoolean(id + wingsPath);
     }
 
+    public void setfpCap(Player p, int value) {
+        dbConfig.set(p.getUniqueId().toString() + fpCapPath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Data.get().setFpCap(p.getUniqueId(), value);
+    }
+
+    public void setfpCap(UUID id, int value) {
+        dbConfig.set(id.toString() + fpCapPath, value);
+        try {
+            dbConfig.save(dbFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Data.get().setFpCap(id, value);
+    }
+
+    public int getfpCap(Player p) {
+        if (!dbConfig.contains(p.getUniqueId() + fpCapPath)) {
+            setfpCap(p, 3);
+            return 3;
+        }
+        return dbConfig.getInt(p.getUniqueId() + fpCapPath);
+    }
+
+    public int getfpCap(UUID id) {
+        if (!dbConfig.contains(id + fpCapPath)) {
+            setfpCap(id, 3);
+            return 3;
+        }
+        return dbConfig.getInt(id + fpCapPath);
+    }
+    //
+
     public void setNight_Vision(Player p, boolean value) {
         dbConfig.set(p.getUniqueId().toString() + visionPath, value);
         try {
@@ -174,7 +217,7 @@ public class Settings {
 
     public boolean getNight_Vision(Player p) {
         if (!dbConfig.contains(p.getUniqueId() + visionPath)) {
-            setWings(p, true);
+            setNight_Vision(p, true);
             return true;
         }
         return dbConfig.getBoolean(p.getUniqueId() + visionPath);
@@ -182,7 +225,7 @@ public class Settings {
 
     public boolean getNight_Vision(UUID id) {
         if (!dbConfig.contains(id + visionPath)) {
-            setWings(id, true);
+            setNight_Vision(id, true);
             return true;
         }
         return dbConfig.getBoolean(id + visionPath);

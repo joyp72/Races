@@ -9,16 +9,21 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,7 +32,7 @@ public class ControlListener implements Listener {
 
     private static ControlListener instance;
     private Settings settings = Settings.get();
-    private Timer timer = Timer.get();
+    private Data data = Data.get();
     private List<UUID> left = new ArrayList<UUID>();
 
     static {
@@ -49,8 +54,8 @@ public class ControlListener implements Listener {
             return;
         }
         String race = settings.getRace(p);
-        if (timer.hasTimer(p.getUniqueId())) {
-            timer.stopTimer(p.getUniqueId());
+        if (data.hasTimer(p.getUniqueId())) {
+            data.stopTimer(p.getUniqueId());
         }
         new BukkitRunnable() {
             @Override
@@ -62,6 +67,69 @@ public class ControlListener implements Listener {
             }
         }.runTaskLater(Main.get(), 5L);
     }
+
+    // @EventHandler
+    // public void onPlayerInteract(PlayerInteractEvent event) {
+    //     Player player = event.getPlayer();
+    //     if (!settings.hasRace(player)) {
+    //         return;
+    //     }
+    //     String race = (String) settings.getRace(player);
+    //     if (!race.equalsIgnoreCase("dragonborne")) {
+    //         return;
+    //     }
+    //     if (event.getHand() != EquipmentSlot.HAND || !player.isSneaking()) {
+    //         return;
+    //     }
+    //     if (data.getFp(player) < 3) { // todo: get fp cost from config
+    //         return;
+    //     }
+    //     new FireBreath(player);
+    // }
+
+    // @EventHandler
+    // public void onEntityDamagebyEntity(EntityDamageByEntityEvent event) {
+    //     if (event.getDamager() instanceof Player) {
+    //         Player player = (Player) event.getDamager();
+    //         if (!settings.hasRace(player)) {
+    //             return;
+    //         }
+    //         // todo: get fp cost from config
+    //         if (settings.getRace(player).equalsIgnoreCase("dragonborne") && player.isSneaking() && data.getFp(player) >= 3) {
+    //             new FireBreath(player);
+    //             if (event.getEntity() instanceof Damageable) {
+    //                 ((Damageable) event.getEntity()).setFireTicks(40); // todo: get from config
+    //             }
+    //             return;
+    //         }
+    //         if (data.getFp(player) >= settings.getfpCap(player)) {
+    //             return;
+    //         }
+    //         data.setFp(player, data.getFp(player) + 1);
+    //         data.showFp(player);
+    //     }
+    // }
+
+    // @EventHandler
+    // public void onProjectileHit(ProjectileHitEvent event) {
+    //     if (event.getEntity() == null) {
+    //         return;
+    //     }
+    //     if (event.getHitEntity() == null || !(event.getHitEntity() instanceof Damageable)) {
+    //         return;
+    //     }
+    //     if (event.getEntity().getShooter() instanceof Player) {
+    //         Player player = (Player) event.getEntity().getShooter();
+    //         if (!settings.hasRace(player)) {
+    //             return;
+    //         }
+    //         if (data.getFp(player) >= settings.getfpCap(player)) {
+    //             return;
+    //         }
+    //         data.setFp(player, data.getFp(player) + 1);
+    //         data.showFp(player);
+    //     }
+    // }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
@@ -90,11 +158,11 @@ public class ControlListener implements Listener {
             if (!p.hasPotionEffect(effect.getType())) {
                 if (effect.getType().equals(PotionEffectType.ABSORPTION)
                     && left.contains(p.getUniqueId())) {
-                        if (timer.hasTimer(p.getUniqueId())) {
-                            timer.stopTimer(p.getUniqueId());
+                        if (data.hasTimer(p.getUniqueId())) {
+                            data.stopTimer(p.getUniqueId());
                         }
-                        timer.createTimer(p.getUniqueId(), 5 * 60);
-                        timer.startTimer(p.getUniqueId());
+                        data.createTimer(p.getUniqueId(), 5 * 60);
+                        data.startTimer(p.getUniqueId());
                         left.remove(p.getUniqueId());
                         continue;
                 }
@@ -113,7 +181,7 @@ public class ControlListener implements Listener {
         if (!race.equalsIgnoreCase("oni")) {
             return;
         }
-        if (timer.hasTimer(p.getUniqueId())) {
+        if (data.hasTimer(p.getUniqueId())) {
             left.add(p.getUniqueId());
         }
     }
@@ -141,8 +209,8 @@ public class ControlListener implements Listener {
         }
         if (p.getAbsorptionAmount() - e.getDamage() <= 0) {
             p.removePotionEffect(PotionEffectType.ABSORPTION);
-            timer.createTimer(p.getUniqueId(), 5 * 60);
-            timer.startTimer(p.getUniqueId());
+            data.createTimer(p.getUniqueId(), 5 * 60);
+            data.startTimer(p.getUniqueId());
         }
     }
 
@@ -171,8 +239,8 @@ public class ControlListener implements Listener {
         if (e.getCause().equals(EntityPotionEffectEvent.Cause.MILK)) {
             return;
         }
-        timer.createTimer(p.getUniqueId(), 5 * 60);
-        timer.startTimer(p.getUniqueId());
+        data.createTimer(p.getUniqueId(), 5 * 60);
+        data.startTimer(p.getUniqueId());
     }
 
     @EventHandler
@@ -208,8 +276,8 @@ public class ControlListener implements Listener {
                     continue;
                 }
                 if (ef.getType().equals(PotionEffectType.ABSORPTION) && ef.getAmplifier() > 1) {
-                    timer.createTimer(p.getUniqueId(), 5 * 60);
-                    timer.startTimer(p.getUniqueId());
+                    data.createTimer(p.getUniqueId(), 5 * 60);
+                    data.startTimer(p.getUniqueId());
                 } else {
                     new BukkitRunnable() {
                         @Override

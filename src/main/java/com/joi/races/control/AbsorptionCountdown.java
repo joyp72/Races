@@ -16,7 +16,7 @@ public class AbsorptionCountdown extends BukkitRunnable {
     private int time;
     private UUID id;
     OfflinePlayer player;
-    Timer timer = Timer.get();
+    Data data = Data.get();
 
     public AbsorptionCountdown(UUID uuid, int t) {
         time = t;
@@ -42,23 +42,23 @@ public class AbsorptionCountdown extends BukkitRunnable {
     @Override
     public void run() {
         if (!player.isOnline()) {
-            timer.onTimerEnd(this);
+            data.onTimerEnd(this);
             this.cancel();
             return;
         }
-        if (!timer.hasTimer(id)) {
+        if (!data.hasTimer(id)) {
             this.cancel();
             return;
         }
         if (time <= 0) {
-            timer.onTimerEnd(this);
+            data.onTimerEnd(this);
             onEnd();
             this.cancel();
             return;
         }
         --time;
         AbsorptionCountdown c = new AbsorptionCountdown(id, time);
-        timer.updateCd(this, c);
+        data.updateCd(this, c);
         c.runTaskLater(Main.get(), 20L);
     }
 

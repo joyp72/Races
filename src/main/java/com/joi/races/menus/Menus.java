@@ -16,7 +16,7 @@ import org.bukkit.potion.PotionType;
 import org.bukkit.profile.PlayerProfile;
 
 import com.joi.races.Settings;
-import com.joi.races.control.Timer;
+import com.joi.races.control.Data;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -31,6 +31,7 @@ public class Menus {
     private static HashMap<UUID, Inventory> selector_menus = new HashMap<UUID, Inventory>();
     private static HashMap<UUID, Inventory> init_menus = new HashMap<UUID, Inventory>();
     private Settings settings = Settings.get();
+    private Data data = Data.get();
 
     public static HashMap<UUID, Inventory> getMenus() {
         return selector_menus;
@@ -176,15 +177,15 @@ public class Menus {
                     ItemMeta meta = timer.getItemMeta();
                     meta.setDisplayName(ChatColor.WHITE + "" + ChatColor.BOLD + "Absorption");
                     ArrayList<String> lore = new ArrayList<>();
-                    if (Timer.get().hasTimer(p.getUniqueId())) {
+                    if (data.hasTimer(p.getUniqueId())) {
                         lore.add(ChatColor.GRAY + "(On cooldown)");
                     } else {
                         lore.add(ChatColor.GRAY + "(Not on cooldown)");
                     }
                     lore.add(" ");
                     lore.add(ChatColor.WHITE + "Time remaining:");
-                    if (Timer.get().hasTimer(p.getUniqueId()) && Timer.get().getTime(p.getUniqueId()) != -1) {
-                        Duration dur = Duration.ofSeconds(Timer.get().getTime(p.getUniqueId()));
+                    if (data.hasTimer(p.getUniqueId()) && data.getTime(p.getUniqueId()) != -1) {
+                        Duration dur = Duration.ofSeconds(data.getTime(p.getUniqueId()));
                         String m = "" + (int)dur.toMinutes();
                         String durS = "" + dur;
                         String s1 = "0", s0 = "";
@@ -199,7 +200,7 @@ public class Menus {
                     meta.addItemFlags(ItemFlag.values());
                     meta.setLore(lore);
                     timer.setItemMeta(meta);
-                    if (!Timer.get().hasTimer(p.getUniqueId())) {
+                    if (!data.hasTimer(p.getUniqueId())) {
                         timer.addUnsafeEnchantment(Enchantment.ARROW_DAMAGE, 2);
                     }
                     menu.setItem(7, timer);

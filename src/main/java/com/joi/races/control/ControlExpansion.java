@@ -20,6 +20,7 @@ public class ControlExpansion extends PlaceholderExpansion {
     }
 
     private Settings settings = Settings.get();
+    private Data data = Data.get();
 
     @Override
     public String getAuthor() {
@@ -33,7 +34,7 @@ public class ControlExpansion extends PlaceholderExpansion {
 
     @Override
     public String getVersion() {
-        return "1.6";
+        return "2.002";
     }
 
     @Override
@@ -55,6 +56,14 @@ public class ControlExpansion extends PlaceholderExpansion {
         }
         if (params.equalsIgnoreCase("tokens")) {
             int amount = settings.getChangeTokens(player.getUniqueId());
+            return "" + amount;
+        }
+        if (params.equalsIgnoreCase("fp")) {
+            int amount = data.getFp(player.getUniqueId());
+            return "" + amount;
+        }
+        if (params.equalsIgnoreCase("fpcap")) {
+            int amount = settings.getfpCap(player.getUniqueId());
             return "" + amount;
         }
         return "";

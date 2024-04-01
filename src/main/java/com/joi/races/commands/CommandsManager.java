@@ -41,6 +41,7 @@ public class CommandsManager implements CommandExecutor {
         cmds.add(new Remove());
         cmds.add(new Wings());
         cmds.add(new Vision());
+        cmds.add(new Test());
     }
 
     @Override
